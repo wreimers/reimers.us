@@ -1,5 +1,63 @@
 baseURL = "http://reimers.us/"
 languageCode = "en-us"
 title = "reimers.us"
+theme = "ezhil"
 publishdir = "./docs/"
-theme = "black-and-light"
+
+paginate = 5
+
+copyright = "© Copyright 2019 by Liam Reimers"
+
+pygmentsstyle = "vs"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+#googleAnalytics = "UA-123-45"
+#disqusShortname = "ezhil-demo"
+
+[params]
+	subtitle = "adventures in coding"
+	# disableDisqusTypes = ["page"]
+	featherIconsCDN = true
+	mode = "dark" # "dark" or "auto"
+	# customCSS = "css/custom.css"  # Custom CSS applied to default styles.
+	# customDarkCSS = "css/custom-dark.css"  # Custom styles applied to dark mode css.
+	# customJS = ["js/custom.js", "js/custom1.js"]  # Custom JS scripts.
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "All posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "About"
+url = "/about"
+weight = 3
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 4
+
+[[params.social]]
+name = "Github"
+icon = "github"
+url = "https://github.com/wreimers"
+
+[[params.social]]
+name = "Twitter"
+icon = "twitter"
+url = "https://twitter.com/wreimers"
+
+[[params.social]]
+name = "RSS"
+icon = "rss"
+url = "/index.xml"
+
+[taxonomies]
+   tag = "tags"
