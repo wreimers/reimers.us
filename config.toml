@@ -1,0 +1,5 @@
+baseURL = "http://reimers.us/"
+languageCode = "en-us"
+title = "reimers.us"
+publishdir = "./docs/"
+theme = "black-and-light"
