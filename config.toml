@@ -16,7 +16,7 @@ pygmentscodefencesguesssyntax = true
 #disqusShortname = "ezhil-demo"
 
 [params]
-	subtitle = "adventures in coding"
+	subtitle = "adventures on a strange planet"
 	# disableDisqusTypes = ["page"]
 	featherIconsCDN = true
 	mode = "dark" # "dark" or "auto"
