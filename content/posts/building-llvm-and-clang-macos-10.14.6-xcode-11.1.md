@@ -3,6 +3,7 @@ title: "Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1"
 date: 2019-10-23T01:54:40-07:00
 categories: ["Development", "LLVM"]
 tags: ["clang", "llvm", "walkthrough"]
+description: "Wherein I become excited about LLVM and set about trying to build it."
 disqus: false
 draft: true
 ---
@@ -11,7 +12,7 @@ I am currently attending the 2019 LLVM Developer Meeting.
 
 {{< tweet 1186677081595236352 >}}
 
-After the first hour, spent listening to the keynote called "Generating Optimized Code with GlobalISel" my brain hurt, but... it was that good kind of pain you get after a particularly hard workout. 
+After the first hour, spent listening to the keynote called "Generating Optimized Code with GlobalISel" my brain hurt, but... it was that good kind of pain like the one you get after a particularly hard workout. 
 
 IMAGE
 
@@ -51,6 +52,7 @@ I updated Homebrew and upgraded all of my installed software. What can I say? I 
 $ brew update
 [...]
 $ brew upgrade
+==> Upgrading 9 outdated packages:
 [...]
 $
 ```
@@ -74,7 +76,7 @@ $ brew install ccache
 $
 ```
 
-## Clone, Configure, Build
+## Clone, Configure, Build & Test
 
 Next, it was time to clone the repository.
 
@@ -100,6 +102,7 @@ $ cd build/
 $ cmake -G Ninja ../llvm/ \
     -DLLVM_ENABLE_PROJECTS="clang" \
     -DCMAKE_BUILD_TYPE="Release" \
+    -DLLVM_ENABLE_ASSERTIONS=On \
     -DLLVM_CCACHE_BUILD=On
 [...]
 -- Build files have been written to: /Users/liamr/Code/llvm-project/build
@@ -130,5 +133,73 @@ Testing Time: 680.16s
   Unsupported Tests  : 1191
 
 1 warning(s) in tests.
-graviton:build liamr$
+$
 ```
+
+## Test Compilation
+
+About an hour later, my laptop's fans have had a great workout, and I've built something! But... does it work?
+
+```
+$ mkdir outputs
+$ mkdir inputs
+$ vi inputs/helloworld.c
+[...]
+$ bat inputs/helloworld.c
+───────┬───────────────────────────────────────────────────────────────────────
+       │ File: inputs/helloworld.c
+───────┼───────────────────────────────────────────────────────────────────────
+   1   │ #include <stdio.h>
+   2   │
+   3   │ int main() {
+   4   │    printf("Hello, World!\n");
+   5   │    return 0;
+   6   │ }
+───────┴───────────────────────────────────────────────────────────────────────
+$ bin/clang -Wall inputs/helloworld.c -o outputs/helloworld
+$ outputs/helloworld
+Hello, World!
+$ bin/clang -S -emit-llvm -O0 inputs/helloworld.c -o outputs/helloworld.ll
+$ bat outputs/helloworld.ll
+───────┬───────────────────────────────────────────────────────────────────────
+       │ File: outputs/helloworld.ll
+───────┼───────────────────────────────────────────────────────────────────────
+   1   │ ; ModuleID = 'inputs/helloworld.c'
+   2   │ source_filename = "inputs/helloworld.c"
+   3   │ target datalayout = "e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
+   4   │ target triple = "x86_64-apple-macosx10.14.6"
+   5   │
+   6   │ @.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+   7   │
+   8   │ ; Function Attrs: noinline nounwind optnone ssp uwtable
+   9   │ define i32 @main() #0 {
+  10   │ entry:
+  11   │   %retval = alloca i32, align 4
+  12   │   store i32 0, i32* %retval, align 4
+  13   │   %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str, i64 0, i64 0))
+  14   │   ret i32 0
+  15   │ }
+  16   │
+  17   │ declare i32 @printf(i8*, ...) #1
+  18   │
+  19   │ attributes #0 = { noinline nounwind optnone ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="fals
+       │ e" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-prot
+       │ ector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+cx8,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+  20   │ attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-
+       │ fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+cx8,+fxsr,+mmx,+sahf,
+       │ +sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+  21   │
+  22   │ !llvm.module.flags = !{!0, !1, !2}
+  23   │ !llvm.ident = !{!3}
+  24   │
+  25   │ !0 = !{i32 2, !"SDK Version", [2 x i32] [i32 10, i32 15]}
+  26   │ !1 = !{i32 1, !"wchar_size", i32 4}
+  27   │ !2 = !{i32 7, !"PIC Level", i32 2}
+  28   │ !3 = !{!"clang version 10.0.0 (git@github.com:llvm/llvm-project.git 23fdd513a3ba7594ccdab1ea30608f4cab7faee4)"}
+───────┴───────────────────────────────────────────────────────────────────────
+$
+```
+
+## Success
+
+IT LIVES!
