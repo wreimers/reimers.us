@@ -6,9 +6,38 @@
     <description>Recent content in Tags on reimers.us</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>© Copyright 2019 by Liam Reimers</copyright>
+    <lastBuildDate>Sun, 03 Nov 2019 11:00:00 -0800</lastBuildDate>
     
 	<atom:link href="http://reimers.us/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>clang</title>
+      <link>http://reimers.us/tags/clang/</link>
+      <pubDate>Sun, 03 Nov 2019 11:00:00 -0800</pubDate>
+      
+      <guid>http://reimers.us/tags/clang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>llvm</title>
+      <link>http://reimers.us/tags/llvm/</link>
+      <pubDate>Sun, 03 Nov 2019 11:00:00 -0800</pubDate>
+      
+      <guid>http://reimers.us/tags/llvm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>walkthrough</title>
+      <link>http://reimers.us/tags/walkthrough/</link>
+      <pubDate>Sun, 03 Nov 2019 11:00:00 -0800</pubDate>
+      
+      <guid>http://reimers.us/tags/walkthrough/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

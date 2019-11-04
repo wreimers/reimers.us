@@ -1,26 +1,20 @@
 ---
 title: "Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1"
-date: 2019-10-23T01:54:40-07:00
+date: 2019-11-03T11:00:00-08:00
 categories: ["Development", "LLVM"]
 tags: ["clang", "llvm", "walkthrough"]
 description: "Wherein I become excited about LLVM and set about trying to build it."
 disqus: false
-draft: true
+draft: false
 ---
 
-I am currently attending the 2019 LLVM Developer Meeting.
+I recently attended the 2019 LLVM Developer Meeting:
 
 {{< tweet 1186677081595236352 >}}
 
-After the first hour, spent listening to the keynote called "Generating Optimized Code with GlobalISel" my brain hurt, but... it was that good kind of pain like the one you get after a particularly hard workout. 
+After the first hour, spent listening to the keynote called "Generating Optimized Code with GlobalISel" my brain hurt, but... it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!
 
-IMAGE
-
-By the end of the day, after having seen several more talks, I was psyched up!
-
-IMAGE
-
-Naturally, when I went home after the first day, I immediately tried to build LLVM on my macBook Pro running macOS 10.14.6 Mojave, and with Xcode 11.1 installed.
+Naturally, when I went home and immediately tried to build LLVM on my macBook Pro running macOS 10.14.6 Mojave, and with Xcode 11.1 installed.
 
 ## Before We Begin
 
@@ -203,3 +197,5 @@ $
 ## Success
 
 IT LIVES!
+
+YMMV, but this worked for me. Let me know on Twitter if you run into anything amiss!
