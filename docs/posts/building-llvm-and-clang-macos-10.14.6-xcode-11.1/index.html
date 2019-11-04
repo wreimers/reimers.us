@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1 - reimers.us</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1" />
+<meta property="og:description" content="Wherein I become excited about LLVM and set about trying to build it." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/" />
+<meta property="article:published_time" content="2019-11-03T11:00:00-08:00" />
+<meta property="article:modified_time" content="2019-11-03T11:00:00-08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1"/>
+<meta name="twitter:description" content="Wherein I become excited about LLVM and set about trying to build it."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="http://reimers.us/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://reimers.us/css/main.css" /><link rel="stylesheet" type="text/css" href="http://reimers.us/css/dark.css"  />
+
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+	<script src="http://reimers.us/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title"><a href="/">reimers.us</a></h1>
+	<div class="site-description"><h2>adventures on a strange planet</h2><nav class="nav social">
+			<ul class="flat"><a href="https://github.com/wreimers" title="Github"><i data-feather="github"></i></a><a href="https://twitter.com/wreimers" title="Twitter"><i data-feather="twitter"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/tags">Tags</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1</h1>
+			<div class="meta">Posted at &mdash; Nov 3, 2019</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<p>I recently attended the 2019 LLVM Developer Meeting:</p>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Welcome! <a href="https://twitter.com/tonic888?ref_src=twsrc%5Etfw">@tonic888</a> <a href="https://twitter.com/llvmorg?ref_src=twsrc%5Etfw">@llvmorg</a>  <a href="https://twitter.com/hashtag/LLVMDevMtg19?src=hash&amp;ref_src=twsrc%5Etfw">#LLVMDevMtg19</a> <a href="https://t.co/aUdzB7Fygf">pic.twitter.com/aUdzB7Fygf</a></p>&mdash; Liam (@wreimers) <a href="https://twitter.com/wreimers/status/1186677081595236352?ref_src=twsrc%5Etfw">October 22, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>After the first hour, spent listening to the keynote called &ldquo;Generating Optimized Code with GlobalISel&rdquo; my brain hurt, but&hellip; it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!</p>
+
+<p>Naturally, when I went home and immediately tried to build LLVM on my macBook Pro running macOS 10.14.6 Mojave, and with Xcode 11.1 installed.</p>
+
+<h2 id="before-we-begin">Before We Begin</h2>
+
+<p>Make sure you&rsquo;ve launched Xcode at least once and it&rsquo;s completed the First Launch Experience, which includes accepting the license agreement. You can also accept using the command line:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ sudo xcodebuild -license accept</pre></div>
+<h2 id="system-headers">System Headers</h2>
+
+<p>I&rsquo;m runing Xcode 11.1, which comes with the macOS 10.15 Catalina SDK. According to <a href="https://developer.apple.com/documentation/xcode_release_notes/xcode_10_release_notes">the Xcode 10.0 release notes</a>, Apple has helpfully provided a package to install the system headers into /usr/include. You&rsquo;ll need these for the LLVM unit tests.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg</pre></div>
+<p>This command will open the package installer UI for you so you can install the headers:</p>
+
+<p><img src="/img/macos-1014-headers-installer-ui.png" alt="Package Installer UI" /></p>
+
+<h2 id="install-requirements">Install Requirements</h2>
+
+<p>Homebrew has some flaws, but I just want dependency management to get out of my way and let me do work, and it&rsquo;s really excellent at that.</p>
+
+<p>I updated Homebrew and upgraded all of my installed software. What can I say? I like to live on the edge.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ brew update
+[...]
+$ brew upgrade
+==&gt; Upgrading 9 outdated packages:
+[...]
+$</pre></div>
+<p>This is all I had to do to get the tools I needed to build LLVM:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ brew install cmake
+==&gt; Downloading https://homebrew.bintray.com/bottles/cmake-3.15.4.mojave.bottle.tar.gz
+Already downloaded: /Users/liamr/Library/Caches/Homebrew/downloads/9013e9f40f45899dbcfa580fa058dfd988d4f12a2d900b9d8b79c4ea99cba1de--cmake-3.15.4.mojave.bottle.tar.gz
+==&gt; Pouring cmake-3.15.4.mojave.bottle.tar.gz
+==&gt; Caveats
+Emacs Lisp files have been installed to:
+  /usr/local/share/emacs/site-lisp/cmake
+==&gt; Summary
+🍺  /usr/local/Cellar/cmake/3.15.4: 5,800 files, 53.4MB
+$ brew install ninja
+[...]
+$ brew install ccache
+[...]
+$</pre></div>
+<h2 id="clone-configure-build-test">Clone, Configure, Build &amp; Test</h2>
+
+<p>Next, it was time to clone the repository.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ git clone git@github.com:llvm/llvm-project.git
+Cloning into &#39;llvm-project&#39;...
+remote: Enumerating objects: 1141, done.
+remote: Counting objects: 100% (1141/1141), done.
+remote: Compressing objects: 100% (155/155), done.
+remote: Total 3577397 (delta 998), reused 1011 (delta 981), pack-reused 3576256
+Receiving objects: 100% (3577397/3577397), 1.14 GiB | 5.98 MiB/s, done.
+Resolving deltas: 100% (2862094/2862094), done.
+Checking out files: 100% (86709/86709), done.
+$</pre></div>
+<p>Whoo-baby, that&rsquo;s a monorepo behemoth. Next, I configured a build.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ cd llvm-project
+$ mkdir build
+$ cd build/
+$ cmake -G Ninja ../llvm/ \
+    -DLLVM_ENABLE_PROJECTS=&#34;clang&#34; \
+    -DCMAKE_BUILD_TYPE=&#34;Release&#34; \
+    -DLLVM_ENABLE_ASSERTIONS=On \
+    -DLLVM_CCACHE_BUILD=On
+[...]
+-- Build files have been written to: /Users/liamr/Code/llvm-project/build
+$</pre></div>
+<p>And now, we build! (And build and run all the tests.)</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><span style="">$</span> ninja check-all
+[184/4275] Generating VCSRevision.h
+-- Found Git: /usr/bin/git (found version <span style="color:#a31515">&#34;2.21.0 (Apple Git-122)&#34;</span>)
+[2412/4275] Generating VCSVersion.inc
+-- Found Git: /usr/bin/git (found version <span style="color:#a31515">&#34;2.21.0 (Apple Git-122)&#34;</span>)
+[3470/4275] cd /Users/liamr/Code/llvm-project/clang/bindings/python &amp;&amp; /usr/local/Cellar/cmake/3.15.4/...E env CLANG_LIBRARY_PATH=/Users/liamr/Code/llvm-project/build/lib /usr/bin/python -m unittest discover
+.................................................s................................................s.s.......s...s.........s...
+----------------------------------------------------------------------
+Ran 126 tests in 0.693s
+
+OK (skipped=6)
+[4274/4275] Running all regression tests
+llvm-lit: /Users/liamr/Code/llvm-project/llvm/utils/lit/lit/llvm/config.py:342: note: using clang: /Users/liamr/Code/llvm-project/build/bin/clang
+llvm-lit: /Users/liamr/Code/llvm-project/llvm/utils/lit/lit/util.py:408: note: using SDKROOT: u<span style="">&#39;</span>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk<span style="">&#39;</span>
+llvm-lit: /Users/liamr/Code/llvm-project/build/utils/lit/tests/lit.cfg:69: warning: Setting a timeout per test not supported. Requires the Python psutil module but it could not be found. Try installing it via pip or via your operating system<span style="">&#39;</span>s <span style="color:#00f">package</span> manager. Some tests will be skipped and the --timeout command line argument will not work.
+Testing Time: 680.16s
+  Expected Passes    : 48896
+  Expected Failures  : 172
+  Unsupported Tests  : 1191
+
+1 warning(s) in tests.
+<span style="">$</span></pre></div>
+<h2 id="test-compilation">Test Compilation</h2>
+
+<p>About an hour later, my laptop&rsquo;s fans have had a great workout, and I&rsquo;ve built something! But&hellip; does it work?</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ mkdir outputs
+$ mkdir inputs
+$ vi inputs/helloworld.c
+[...]
+$ bat inputs/helloworld.c
+───────┬───────────────────────────────────────────────────────────────────────
+       │ File: inputs/helloworld.c
+───────┼───────────────────────────────────────────────────────────────────────
+   1   │ #include &lt;stdio.h&gt;
+   2   │
+   3   │ int main() {
+   4   │    printf(&#34;Hello, World!\n&#34;);
+   5   │    return 0;
+   6   │ }
+───────┴───────────────────────────────────────────────────────────────────────
+$ bin/clang -Wall inputs/helloworld.c -o outputs/helloworld
+$ outputs/helloworld
+Hello, World!
+$ bin/clang -S -emit-llvm -O0 inputs/helloworld.c -o outputs/helloworld.ll
+$ bat outputs/helloworld.ll
+───────┬───────────────────────────────────────────────────────────────────────
+       │ File: outputs/helloworld.ll
+───────┼───────────────────────────────────────────────────────────────────────
+   1   │ ; ModuleID = &#39;inputs/helloworld.c&#39;
+   2   │ source_filename = &#34;inputs/helloworld.c&#34;
+   3   │ target datalayout = &#34;e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128&#34;
+   4   │ target triple = &#34;x86_64-apple-macosx10.14.6&#34;
+   5   │
+   6   │ @.str = private unnamed_addr constant [15 x i8] c&#34;Hello, World!\0A\00&#34;, align 1
+   7   │
+   8   │ ; Function Attrs: noinline nounwind optnone ssp uwtable
+   9   │ define i32 @main() #0 {
+  10   │ entry:
+  11   │   %retval = alloca i32, align 4
+  12   │   store i32 0, i32* %retval, align 4
+  13   │   %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str, i64 0, i64 0))
+  14   │   ret i32 0
+  15   │ }
+  16   │
+  17   │ declare i32 @printf(i8*, ...) #1
+  18   │
+  19   │ attributes #0 = { noinline nounwind optnone ssp uwtable &#34;correctly-rounded-divide-sqrt-fp-math&#34;=&#34;false&#34; &#34;disable-tail-calls&#34;=&#34;false&#34; &#34;frame-pointer&#34;=&#34;all&#34; &#34;less-precise-fpmad&#34;=&#34;fals
+       │ e&#34; &#34;min-legal-vector-width&#34;=&#34;0&#34; &#34;no-infs-fp-math&#34;=&#34;false&#34; &#34;no-jump-tables&#34;=&#34;false&#34; &#34;no-nans-fp-math&#34;=&#34;false&#34; &#34;no-signed-zeros-fp-math&#34;=&#34;false&#34; &#34;no-trapping-math&#34;=&#34;false&#34; &#34;stack-prot
+       │ ector-buffer-size&#34;=&#34;8&#34; &#34;target-cpu&#34;=&#34;penryn&#34; &#34;target-features&#34;=&#34;+cx16,+cx8,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87&#34; &#34;unsafe-fp-math&#34;=&#34;false&#34; &#34;use-soft-float&#34;=&#34;false&#34; }
+  20   │ attributes #1 = { &#34;correctly-rounded-divide-sqrt-fp-math&#34;=&#34;false&#34; &#34;disable-tail-calls&#34;=&#34;false&#34; &#34;frame-pointer&#34;=&#34;all&#34; &#34;less-precise-fpmad&#34;=&#34;false&#34; &#34;no-infs-fp-math&#34;=&#34;false&#34; &#34;no-nans-
+       │ fp-math&#34;=&#34;false&#34; &#34;no-signed-zeros-fp-math&#34;=&#34;false&#34; &#34;no-trapping-math&#34;=&#34;false&#34; &#34;stack-protector-buffer-size&#34;=&#34;8&#34; &#34;target-cpu&#34;=&#34;penryn&#34; &#34;target-features&#34;=&#34;+cx16,+cx8,+fxsr,+mmx,+sahf,
+       │ +sse,+sse2,+sse3,+sse4.1,+ssse3,+x87&#34; &#34;unsafe-fp-math&#34;=&#34;false&#34; &#34;use-soft-float&#34;=&#34;false&#34; }
+  21   │
+  22   │ !llvm.module.flags = !{!0, !1, !2}
+  23   │ !llvm.ident = !{!3}
+  24   │
+  25   │ !0 = !{i32 2, !&#34;SDK Version&#34;, [2 x i32] [i32 10, i32 15]}
+  26   │ !1 = !{i32 1, !&#34;wchar_size&#34;, i32 4}
+  27   │ !2 = !{i32 7, !&#34;PIC Level&#34;, i32 2}
+  28   │ !3 = !{!&#34;clang version 10.0.0 (git@github.com:llvm/llvm-project.git 23fdd513a3ba7594ccdab1ea30608f4cab7faee4)&#34;}
+───────┴───────────────────────────────────────────────────────────────────────
+$</pre></div>
+<h2 id="success">Success</h2>
+
+<p>IT LIVES!</p>
+
+<p>YMMV, but this worked for me. Let me know on Twitter if you run into anything amiss!</p>
+
+		</div>
+
+		<div class="post-tags">
+			
+				
+					<nav class="nav tags">
+							<ul class="flat">
+								
+								<li><a href="/tags/clang">clang</a></li>
+								
+								<li><a href="/tags/llvm">llvm</a></li>
+								
+								<li><a href="/tags/walkthrough">walkthrough</a></li>
+								
+							</ul>
+					</nav>
+				
+			
+		</div></div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright 2019 by Liam Reimers </div>
+	</nav>
+</div>
+
+<script>feather.replace()</script>
+</body>
+</html>
