@@ -38,5 +38,5 @@ Please enjoy, and I welcome feedback on [Twitter](https://twitter.com/wreimers).
 
 - [Core Set 2021 Deck Checklist (via WotC)](https://media.wpn.wizards.com/attachements/mtgm21_en_dckcklst.pdf)
 - [Core Set 2021 Extended Collection Checklist](/mtg/M21ExtendedChecklist.pdf)
-- [Scryfall](https://scryfal.com)
+- [Scryfall](https://scryfall.com)
 - [WotC Rules and Documents](https://wpn.wizards.com/en/resources/rules-documents)
