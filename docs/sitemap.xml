@@ -3,6 +3,41 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://reimers.us/tags/checklist/</loc>
+    <lastmod>2020-07-07T11:31:00-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://reimers.us/posts/magic-extended-collection-checklist-m21/</loc>
+    <lastmod>2020-07-07T11:31:00-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://reimers.us/tags/m21/</loc>
+    <lastmod>2020-07-07T11:31:00-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://reimers.us/tags/mtg/</loc>
+    <lastmod>2020-07-07T11:31:00-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://reimers.us/posts/</loc>
+    <lastmod>2020-07-07T11:31:00-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://reimers.us/</loc>
+    <lastmod>2020-07-07T11:31:00-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://reimers.us/tags/</loc>
+    <lastmod>2020-07-07T11:31:00-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</loc>
     <lastmod>2019-11-03T11:00:00-08:00</lastmod>
   </url>
@@ -14,21 +49,6 @@
   
   <url>
     <loc>https://reimers.us/tags/llvm/</loc>
-    <lastmod>2019-11-03T11:00:00-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://reimers.us/posts/</loc>
-    <lastmod>2019-11-03T11:00:00-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://reimers.us/</loc>
-    <lastmod>2019-11-03T11:00:00-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://reimers.us/tags/</loc>
     <lastmod>2019-11-03T11:00:00-08:00</lastmod>
   </url>
   

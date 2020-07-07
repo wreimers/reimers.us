@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>reimers.us</title>
-    <link>https://reimers.us/</link>
-    <description>Recent content on reimers.us</description>
+    <title>mtg on reimers.us</title>
+    <link>https://reimers.us/tags/mtg/</link>
+    <description>Recent content in mtg on reimers.us</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Copyright 2019-2020 by Liam Reimers</copyright>
     <lastBuildDate>Tue, 07 Jul 2020 11:31:00 -0800</lastBuildDate>
     
-	<atom:link href="https://reimers.us/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://reimers.us/tags/mtg/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,17 +19,6 @@
       
       <guid>https://reimers.us/posts/magic-extended-collection-checklist-m21/</guid>
       <description>I&amp;rsquo;ve been playing Magic: the Gathering - a collectible card game published by Wizards of the Coast (WotC) - since 1994. It plucks a lot of my strings: it&amp;rsquo;s fantasy themed; it&amp;rsquo;s art-forward; it&amp;rsquo;s a complex math-based game; it requires exploration with and interaction with other players; and, importantly, it&amp;rsquo;s collectible. I&amp;rsquo;m very much a completionist in many aspects of life, not least of which is collecting Magic. recently though, I found myself in need of additonal tools to manage my collection.</description>
-    </item>
-    
-    <item>
-      <title>Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1</title>
-      <link>https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</link>
-      <pubDate>Sun, 03 Nov 2019 11:00:00 -0800</pubDate>
-      
-      <guid>https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</guid>
-      <description>I recently attended the 2019 LLVM Developer Meeting:
-Welcome! @tonic888 @llvmorg #LLVMDevMtg19 pic.twitter.com/aUdzB7Fygf
-&amp;mdash; Liam (@wreimers) October 22, 2019  After the first hour, spent listening to the keynote called &amp;ldquo;Generating Optimized Code with GlobalISel&amp;rdquo; my brain hurt, but&amp;hellip; it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!</description>
     </item>
     
   </channel>
