@@ -52,43 +52,31 @@
 		</div>
 
 		<div class="markdown">
-			
-
-<p>I recently attended the 2019 LLVM Developer Meeting:</p>
-
+			<p>I recently attended the 2019 LLVM Developer Meeting:</p>
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Welcome! <a href="https://twitter.com/tonic888?ref_src=twsrc%5Etfw">@tonic888</a> <a href="https://twitter.com/llvmorg?ref_src=twsrc%5Etfw">@llvmorg</a>  <a href="https://twitter.com/hashtag/LLVMDevMtg19?src=hash&amp;ref_src=twsrc%5Etfw">#LLVMDevMtg19</a> <a href="https://t.co/aUdzB7Fygf">pic.twitter.com/aUdzB7Fygf</a></p>&mdash; Liam (@wreimers) <a href="https://twitter.com/wreimers/status/1186677081595236352?ref_src=twsrc%5Etfw">October 22, 2019</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-
 <p>After the first hour, spent listening to the keynote called &ldquo;Generating Optimized Code with GlobalISel&rdquo; my brain hurt, but&hellip; it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!</p>
-
 <p>Naturally, when I went home and immediately tried to build LLVM on my macBook Pro running macOS 10.14.6 Mojave, and with Xcode 11.1 installed.</p>
-
 <h2 id="before-we-begin">Before We Begin</h2>
-
-<p>Make sure you&rsquo;ve launched Xcode at least once and it&rsquo;s completed the First Launch Experience, which includes accepting the license agreement. You can also accept using the command line:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ sudo xcodebuild -license accept</pre></div>
-<h2 id="system-headers">System Headers</h2>
-
-<p>I&rsquo;m runing Xcode 11.1, which comes with the macOS 10.15 Catalina SDK. According to <a href="https://developer.apple.com/documentation/xcode_release_notes/xcode_10_release_notes">the Xcode 10.0 release notes</a>, Apple has helpfully provided a package to install the system headers into /usr/include. You&rsquo;ll need these for the LLVM unit tests.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg</pre></div>
-<p>This command will open the package installer UI for you so you can install the headers:</p>
-
-<p><img src="/img/macos-1014-headers-installer-ui.png" alt="Package Installer UI" /></p>
-
+<p>Make sure you've launched Xcode at least once and it's completed the First Launch Experience, which includes accepting the license agreement. You can also accept using the command line:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ sudo xcodebuild -license accept
+</code></pre></div><h2 id="system-headers">System Headers</h2>
+<p>I'm runing Xcode 11.1, which comes with the macOS 10.15 Catalina SDK. According to <a href="https://developer.apple.com/documentation/xcode_release_notes/xcode_10_release_notes">the Xcode 10.0 release notes</a>, Apple has helpfully provided a package to install the system headers into /usr/include. You'll need these for the LLVM unit tests.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
+</code></pre></div><p>This command will open the package installer UI for you so you can install the headers:</p>
+<p><img src="/img/macos-1014-headers-installer-ui.png" alt="Package Installer UI"></p>
 <h2 id="install-requirements">Install Requirements</h2>
-
-<p>Homebrew has some flaws, but I just want dependency management to get out of my way and let me do work, and it&rsquo;s really excellent at that.</p>
-
+<p>Homebrew has some flaws, but I just want dependency management to get out of my way and let me do work, and it's really excellent at that.</p>
 <p>I updated Homebrew and upgraded all of my installed software. What can I say? I like to live on the edge.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ brew update
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ brew update
 [...]
 $ brew upgrade
 ==&gt; Upgrading 9 outdated packages:
 [...]
-$</pre></div>
-<p>This is all I had to do to get the tools I needed to build LLVM:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ brew install cmake
+$
+</code></pre></div><p>This is all I had to do to get the tools I needed to build LLVM:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ brew install cmake
 ==&gt; Downloading https://homebrew.bintray.com/bottles/cmake-3.15.4.mojave.bottle.tar.gz
 Already downloaded: /Users/liamr/Library/Caches/Homebrew/downloads/9013e9f40f45899dbcfa580fa058dfd988d4f12a2d900b9d8b79c4ea99cba1de--cmake-3.15.4.mojave.bottle.tar.gz
 ==&gt; Pouring cmake-3.15.4.mojave.bottle.tar.gz
@@ -101,11 +89,10 @@ $ brew install ninja
 [...]
 $ brew install ccache
 [...]
-$</pre></div>
-<h2 id="clone-configure-build-test">Clone, Configure, Build &amp; Test</h2>
-
+$
+</code></pre></div><h2 id="clone-configure-build--test">Clone, Configure, Build &amp; Test</h2>
 <p>Next, it was time to clone the repository.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ git clone git@github.com:llvm/llvm-project.git
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ git clone git@github.com:llvm/llvm-project.git
 Cloning into &#39;llvm-project&#39;...
 remote: Enumerating objects: 1141, done.
 remote: Counting objects: 100% (1141/1141), done.
@@ -114,9 +101,9 @@ remote: Total 3577397 (delta 998), reused 1011 (delta 981), pack-reused 3576256
 Receiving objects: 100% (3577397/3577397), 1.14 GiB | 5.98 MiB/s, done.
 Resolving deltas: 100% (2862094/2862094), done.
 Checking out files: 100% (86709/86709), done.
-$</pre></div>
-<p>Whoo-baby, that&rsquo;s a monorepo behemoth. Next, I configured a build.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ cd llvm-project
+$
+</code></pre></div><p>Whoo-baby, that's a monorepo behemoth. Next, I configured a build.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ cd llvm-project
 $ mkdir build
 $ cd build/
 $ cmake -G Ninja ../llvm/ \
@@ -126,9 +113,9 @@ $ cmake -G Ninja ../llvm/ \
     -DLLVM_CCACHE_BUILD=On
 [...]
 -- Build files have been written to: /Users/liamr/Code/llvm-project/build
-$</pre></div>
-<p>And now, we build! (And build and run all the tests.)</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><span style="">$</span> ninja check-all
+$
+</code></pre></div><p>And now, we build! (And build and run all the tests.)</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="">$</span> ninja check-all
 [184/4275] Generating VCSRevision.h
 -- Found Git: /usr/bin/git (found version <span style="color:#a31515">&#34;2.21.0 (Apple Git-122)&#34;</span>)
 [2412/4275] Generating VCSVersion.inc
@@ -149,11 +136,10 @@ Testing Time: 680.16s
   Unsupported Tests  : 1191
 
 1 warning(s) in tests.
-<span style="">$</span></pre></div>
-<h2 id="test-compilation">Test Compilation</h2>
-
-<p>About an hour later, my laptop&rsquo;s fans have had a great workout, and I&rsquo;ve built something! But&hellip; does it work?</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ mkdir outputs
+<span style="">$</span>
+</code></pre></div><h2 id="test-compilation">Test Compilation</h2>
+<p>About an hour later, my laptop's fans have had a great workout, and I've built something! But&hellip; does it work?</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ mkdir outputs
 $ mkdir inputs
 $ vi inputs/helloworld.c
 [...]
@@ -209,11 +195,9 @@ $ bat outputs/helloworld.ll
   27   │ !2 = !{i32 7, !&#34;PIC Level&#34;, i32 2}
   28   │ !3 = !{!&#34;clang version 10.0.0 (git@github.com:llvm/llvm-project.git 23fdd513a3ba7594ccdab1ea30608f4cab7faee4)&#34;}
 ───────┴───────────────────────────────────────────────────────────────────────
-$</pre></div>
-<h2 id="success">Success</h2>
-
+$
+</code></pre></div><h2 id="success">Success</h2>
 <p>IT LIVES!</p>
-
 <p>YMMV, but this worked for me. Let me know on Twitter if you run into anything amiss!</p>
 
 		</div>
@@ -237,7 +221,7 @@ $</pre></div>
 		</div></div>
 	<div class="footer wrapper">
 	<nav class="nav">
-		<div> © Copyright 2019-2020 by Liam Reimers |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+		<div> © Copyright 2019-2020 by Liam Reimers </div>
 	</nav>
 </div>
 
