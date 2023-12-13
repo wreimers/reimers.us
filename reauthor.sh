@@ -2,7 +2,7 @@
 
 git filter-branch --env-filter '
 
-OLD_EMAIL="mauledbylove@gmail.com"
+OLD_EMAIL="wreimers@apple.com"
 CORRECT_NAME="Liam Reimers"
 CORRECT_EMAIL="liam.reimers@gmail.com"
 
