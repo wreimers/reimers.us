@@ -7,11 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Copyright 2019-2020 by Liam Reimers</copyright>
-    <lastBuildDate>Tue, 07 Jul 2020 11:31:00 -0800</lastBuildDate>
-    
-	<atom:link href="https://reimers.us/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 07 Jul 2020 11:31:00 -0800</lastBuildDate><atom:link href="https://reimers.us/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>checklist</title>
       <link>https://reimers.us/tags/checklist/</link>

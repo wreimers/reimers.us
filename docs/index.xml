@@ -7,18 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Copyright 2019-2020 by Liam Reimers</copyright>
-    <lastBuildDate>Tue, 07 Jul 2020 11:31:00 -0800</lastBuildDate>
-    
-	<atom:link href="https://reimers.us/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 07 Jul 2020 11:31:00 -0800</lastBuildDate><atom:link href="https://reimers.us/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Extended Collection Checklist - Core Set 2021</title>
       <link>https://reimers.us/posts/magic-extended-collection-checklist-m21/</link>
       <pubDate>Tue, 07 Jul 2020 11:31:00 -0800</pubDate>
       
       <guid>https://reimers.us/posts/magic-extended-collection-checklist-m21/</guid>
-      <description>I&#39;ve been playing Magic: the Gathering - a collectible card game published by Wizards of the Coast (WotC) - since 1994. It plucks a lot of my strings: it&#39;s fantasy themed; it&#39;s art-forward; it&#39;s a complex math-based game; it requires exploration and interaction with other players; and, importantly, it&#39;s collectible. I&#39;m very much a completionist in many aspects of life, not least of which is collecting Magic. Recently though, I found myself in need of additonal tools to manage my collection.</description>
+      <description>I&amp;rsquo;ve been playing Magic: the Gathering - a collectible card game published by Wizards of the Coast (WotC) - since 1994. It plucks a lot of my strings: it&amp;rsquo;s fantasy themed; it&amp;rsquo;s art-forward; it&amp;rsquo;s a complex math-based game; it requires exploration and interaction with other players; and, importantly, it&amp;rsquo;s collectible. I&amp;rsquo;m very much a completionist in many aspects of life, not least of which is collecting Magic. Recently though, I found myself in need of additonal tools to manage my collection.</description>
     </item>
     
     <item>
@@ -28,8 +24,8 @@
       
       <guid>https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</guid>
       <description>I recently attended the 2019 LLVM Developer Meeting:
-Welcome! @tonic888 @llvmorg #LLVMDevMtg19 pic.twitter.com/aUdzB7Fygf
-&amp;mdash; Liam Reimers (@wreimers) October 22, 2019  After the first hour, spent listening to the keynote called &amp;ldquo;Generating Optimized Code with GlobalISel&amp;rdquo; my brain hurt, but&amp;hellip; it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!</description>
+After the first hour, spent listening to the keynote called &amp;ldquo;Generating Optimized Code with GlobalISel&amp;rdquo; my brain hurt, but&amp;hellip; it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!
+Naturally, when I went home and immediately tried to build LLVM on my macBook Pro running macOS 10.</description>
     </item>
     
   </channel>
