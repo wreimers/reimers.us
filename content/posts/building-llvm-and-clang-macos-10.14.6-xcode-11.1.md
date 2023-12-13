@@ -10,7 +10,7 @@ draft: false
 
 I recently attended the 2019 LLVM Developer Meeting:
 
-{{< tweet 1186677081595236352 >}}
+`Sorry, X (née Twitter) deleted my post.`
 
 After the first hour, spent listening to the keynote called "Generating Optimized Code with GlobalISel" my brain hurt, but... it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!
 
