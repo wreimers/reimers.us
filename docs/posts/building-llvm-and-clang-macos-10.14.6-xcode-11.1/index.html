@@ -2,15 +2,15 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1 - reimers.us</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1 - travels on a strange planet</title><link rel="icon" type="image/png" href=icons/myicon.png /><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1" />
 <meta property="og:description" content="Wherein I become excited about LLVM and set about trying to build it." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/" />
+<meta property="og:url" content="https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2019-11-03T11:00:00-08:00" />
 <meta property="article:modified_time" content="2019-11-03T11:00:00-08:00" />
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1"/>
 <meta name="twitter:description" content="Wherein I become excited about LLVM and set about trying to build it."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300" rel="stylesheet">
 
@@ -19,14 +19,18 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 	<script src="https://reimers.us/js/main.js"></script>
+	<script src="https://reimers.us/js/abc.js"></script>
+	<script src="https://reimers.us/js/xyz.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 
 <body>
 	<div class="container wrapper post">
 		<div class="header">
-	<h1 class="site-title"><a href="/">reimers.us</a></h1>
-	<div class="site-description"><h2>adventures on a strange planet</h2><nav class="nav social">
-			<ul class="flat"><a href="https://github.com/wreimers" title="Github"><i data-feather="github"></i></a><a href="https://twitter.com/wreimers" title="Twitter"><i data-feather="twitter"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+	<base href="https://reimers.us/">
+	<h1 class="site-title"><a href="https://reimers.us/">travels on a strange planet</a></h1>
+	<div class="site-description"><h2>blend in with the humans</h2><nav class="nav social">
+			<ul class="flat"><a href="https://github.com/wreimers" title="Github"><i data-feather="github"></i></a><a href="https://mastodon.social/@wreimers" title="Mastodon"><i data-feather="user-check"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
 		</nav>
 	</div>
 
@@ -48,155 +52,153 @@
 
 		<div class="post-header">
 			<h1 class="title">Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1</h1>
-			<div class="meta">Posted Nov 3, 2019</div>
+			<div class="meta">Posted at &mdash; Nov 3, 2019</div>
 		</div>
 
 		<div class="markdown">
 			<p>I recently attended the 2019 LLVM Developer Meeting:</p>
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Welcome! <a href="https://twitter.com/tonic888?ref_src=twsrc%5Etfw">@tonic888</a> <a href="https://twitter.com/llvmorg?ref_src=twsrc%5Etfw">@llvmorg</a>  <a href="https://twitter.com/hashtag/LLVMDevMtg19?src=hash&amp;ref_src=twsrc%5Etfw">#LLVMDevMtg19</a> <a href="https://t.co/aUdzB7Fygf">pic.twitter.com/aUdzB7Fygf</a></p>&mdash; Liam Reimers (@wreimers) <a href="https://twitter.com/wreimers/status/1186677081595236352?ref_src=twsrc%5Etfw">October 22, 2019</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
+<p><code>Sorry, X (née Twitter) deleted my post.</code></p>
 <p>After the first hour, spent listening to the keynote called &ldquo;Generating Optimized Code with GlobalISel&rdquo; my brain hurt, but&hellip; it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!</p>
 <p>Naturally, when I went home and immediately tried to build LLVM on my macBook Pro running macOS 10.14.6 Mojave, and with Xcode 11.1 installed.</p>
 <h2 id="before-we-begin">Before We Begin</h2>
-<p>Make sure you've launched Xcode at least once and it's completed the First Launch Experience, which includes accepting the license agreement. You can also accept using the command line:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ sudo xcodebuild -license accept
-</code></pre></div><h2 id="system-headers">System Headers</h2>
-<p>I'm runing Xcode 11.1, which comes with the macOS 10.15 Catalina SDK. According to <a href="https://developer.apple.com/documentation/xcode_release_notes/xcode_10_release_notes">the Xcode 10.0 release notes</a>, Apple has helpfully provided a package to install the system headers into /usr/include. You'll need these for the LLVM unit tests.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
-</code></pre></div><p>This command will open the package installer UI for you so you can install the headers:</p>
+<p>Make sure you&rsquo;ve launched Xcode at least once and it&rsquo;s completed the First Launch Experience, which includes accepting the license agreement. You can also accept using the command line:</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ sudo xcodebuild -license accept
+</span></span></code></pre></div><h2 id="system-headers">System Headers</h2>
+<p>I&rsquo;m runing Xcode 11.1, which comes with the macOS 10.15 Catalina SDK. According to <a href="https://developer.apple.com/documentation/xcode_release_notes/xcode_10_release_notes">the Xcode 10.0 release notes</a>, Apple has helpfully provided a package to install the system headers into /usr/include. You&rsquo;ll need these for the LLVM unit tests.</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
+</span></span></code></pre></div><p>This command will open the package installer UI for you so you can install the headers:</p>
 <p><img src="/img/macos-1014-headers-installer-ui.png" alt="Package Installer UI"></p>
 <h2 id="install-requirements">Install Requirements</h2>
-<p>Homebrew has some flaws, but I just want dependency management to get out of my way and let me do work, and it's really excellent at that.</p>
+<p>Homebrew has some flaws, but I just want dependency management to get out of my way and let me do work, and it&rsquo;s really excellent at that.</p>
 <p>I updated Homebrew and upgraded all of my installed software. What can I say? I like to live on the edge.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ brew update
-[...]
-$ brew upgrade
-==&gt; Upgrading 9 outdated packages:
-[...]
-$
-</code></pre></div><p>This is all I had to do to get the tools I needed to build LLVM:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ brew install cmake
-==&gt; Downloading https://homebrew.bintray.com/bottles/cmake-3.15.4.mojave.bottle.tar.gz
-Already downloaded: /Users/liamr/Library/Caches/Homebrew/downloads/9013e9f40f45899dbcfa580fa058dfd988d4f12a2d900b9d8b79c4ea99cba1de--cmake-3.15.4.mojave.bottle.tar.gz
-==&gt; Pouring cmake-3.15.4.mojave.bottle.tar.gz
-==&gt; Caveats
-Emacs Lisp files have been installed to:
-  /usr/local/share/emacs/site-lisp/cmake
-==&gt; Summary
-🍺  /usr/local/Cellar/cmake/3.15.4: 5,800 files, 53.4MB
-$ brew install ninja
-[...]
-$ brew install ccache
-[...]
-$
-</code></pre></div><h2 id="clone-configure-build--test">Clone, Configure, Build &amp; Test</h2>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ brew update
+</span></span><span style="display:flex;"><span>[...]
+</span></span><span style="display:flex;"><span>$ brew upgrade
+</span></span><span style="display:flex;"><span>==&gt; Upgrading 9 outdated packages:
+</span></span><span style="display:flex;"><span>[...]
+</span></span><span style="display:flex;"><span>$
+</span></span></code></pre></div><p>This is all I had to do to get the tools I needed to build LLVM:</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#719e07">$</span> brew install cmake
+</span></span><span style="display:flex;"><span><span style="color:#719e07">==&gt;</span> Downloading https:<span style="color:#719e07">//</span>homebrew<span style="color:#719e07">.</span>bintray<span style="color:#719e07">.</span>com<span style="color:#719e07">/</span>bottles<span style="color:#719e07">/</span>cmake<span style="color:#719e07">-</span><span style="color:#2aa198">3.15</span><span style="color:#719e07">.</span><span style="color:#2aa198">4.</span>mojave<span style="color:#719e07">.</span>bottle<span style="color:#719e07">.</span>tar<span style="color:#719e07">.</span>gz
+</span></span><span style="display:flex;"><span>Already downloaded: <span style="color:#719e07">/</span>Users<span style="color:#719e07">/</span>liamr<span style="color:#719e07">/</span>Library<span style="color:#719e07">/</span>Caches<span style="color:#719e07">/</span>Homebrew<span style="color:#719e07">/</span>downloads<span style="color:#719e07">/</span><span style="color:#2aa198">9013e9</span>f40f45899dbcfa580fa058dfd988d4f12a2d900b9d8b79c4ea99cba1de<span style="color:#719e07">--</span>cmake<span style="color:#719e07">-</span><span style="color:#2aa198">3.15</span><span style="color:#719e07">.</span><span style="color:#2aa198">4.</span>mojave<span style="color:#719e07">.</span>bottle<span style="color:#719e07">.</span>tar<span style="color:#719e07">.</span>gz
+</span></span><span style="display:flex;"><span><span style="color:#719e07">==&gt;</span> Pouring cmake<span style="color:#719e07">-</span><span style="color:#2aa198">3.15</span><span style="color:#719e07">.</span><span style="color:#2aa198">4.</span>mojave<span style="color:#719e07">.</span>bottle<span style="color:#719e07">.</span>tar<span style="color:#719e07">.</span>gz
+</span></span><span style="display:flex;"><span><span style="color:#719e07">==&gt;</span> Caveats
+</span></span><span style="display:flex;"><span>Emacs Lisp files have been installed to:
+</span></span><span style="display:flex;"><span>  <span style="color:#719e07">/</span>usr<span style="color:#719e07">/</span>local<span style="color:#719e07">/</span>share<span style="color:#719e07">/</span>emacs<span style="color:#719e07">/</span>site<span style="color:#719e07">-</span>lisp<span style="color:#719e07">/</span>cmake
+</span></span><span style="display:flex;"><span><span style="color:#719e07">==&gt;</span> Summary
+</span></span><span style="display:flex;"><span>🍺  <span style="color:#719e07">/</span>usr<span style="color:#719e07">/</span>local<span style="color:#719e07">/</span>Cellar<span style="color:#719e07">/</span>cmake<span style="color:#719e07">/</span><span style="color:#2aa198">3.15</span><span style="color:#719e07">.</span><span style="color:#2aa198">4</span>: <span style="color:#2aa198">5</span>,<span style="color:#2aa198">800</span> files, <span style="color:#2aa198">53.4</span>MB
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> brew install ninja
+</span></span><span style="display:flex;"><span>[<span style="color:#719e07">...</span>]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> brew install ccache
+</span></span><span style="display:flex;"><span>[<span style="color:#719e07">...</span>]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span>
+</span></span></code></pre></div><h2 id="clone-configure-build--test">Clone, Configure, Build &amp; Test</h2>
 <p>Next, it was time to clone the repository.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ git clone git@github.com:llvm/llvm-project.git
-Cloning into &#39;llvm-project&#39;...
-remote: Enumerating objects: 1141, done.
-remote: Counting objects: 100% (1141/1141), done.
-remote: Compressing objects: 100% (155/155), done.
-remote: Total 3577397 (delta 998), reused 1011 (delta 981), pack-reused 3576256
-Receiving objects: 100% (3577397/3577397), 1.14 GiB | 5.98 MiB/s, done.
-Resolving deltas: 100% (2862094/2862094), done.
-Checking out files: 100% (86709/86709), done.
-$
-</code></pre></div><p>Whoo-baby, that's a monorepo behemoth. Next, I configured a build.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ cd llvm-project
-$ mkdir build
-$ cd build/
-$ cmake -G Ninja ../llvm/ \
-    -DLLVM_ENABLE_PROJECTS=&#34;clang&#34; \
-    -DCMAKE_BUILD_TYPE=&#34;Release&#34; \
-    -DLLVM_ENABLE_ASSERTIONS=On \
-    -DLLVM_CCACHE_BUILD=On
-[...]
--- Build files have been written to: /Users/liamr/Code/llvm-project/build
-$
-</code></pre></div><p>And now, we build! (And build and run all the tests.)</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="">$</span> ninja check-all
-[184/4275] Generating VCSRevision.h
--- Found Git: /usr/bin/git (found version <span style="color:#a31515">&#34;2.21.0 (Apple Git-122)&#34;</span>)
-[2412/4275] Generating VCSVersion.inc
--- Found Git: /usr/bin/git (found version <span style="color:#a31515">&#34;2.21.0 (Apple Git-122)&#34;</span>)
-[3470/4275] cd /Users/liamr/Code/llvm-project/clang/bindings/python &amp;&amp; /usr/local/Cellar/cmake/3.15.4/...E env CLANG_LIBRARY_PATH=/Users/liamr/Code/llvm-project/build/lib /usr/bin/python -m unittest discover
-.................................................s................................................s.s.......s...s.........s...
-----------------------------------------------------------------------
-Ran 126 tests in 0.693s
-
-OK (skipped=6)
-[4274/4275] Running all regression tests
-llvm-lit: /Users/liamr/Code/llvm-project/llvm/utils/lit/lit/llvm/config.py:342: note: using clang: /Users/liamr/Code/llvm-project/build/bin/clang
-llvm-lit: /Users/liamr/Code/llvm-project/llvm/utils/lit/lit/util.py:408: note: using SDKROOT: u<span style="">&#39;</span>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk<span style="">&#39;</span>
-llvm-lit: /Users/liamr/Code/llvm-project/build/utils/lit/tests/lit.cfg:69: warning: Setting a timeout per test not supported. Requires the Python psutil module but it could not be found. Try installing it via pip or via your operating system<span style="">&#39;</span>s <span style="color:#00f">package</span> manager. Some tests will be skipped and the --timeout command line argument will not work.
-Testing Time: 680.16s
-  Expected Passes    : 48896
-  Expected Failures  : 172
-  Unsupported Tests  : 1191
-
-1 warning(s) in tests.
-<span style="">$</span>
-</code></pre></div><h2 id="test-compilation">Test Compilation</h2>
-<p>About an hour later, my laptop's fans have had a great workout, and I've built something! But&hellip; does it work?</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$ mkdir outputs
-$ mkdir inputs
-$ vi inputs/helloworld.c
-[...]
-$ bat inputs/helloworld.c
-───────┬───────────────────────────────────────────────────────────────────────
-       │ File: inputs/helloworld.c
-───────┼───────────────────────────────────────────────────────────────────────
-   1   │ #include &lt;stdio.h&gt;
-   2   │
-   3   │ int main() {
-   4   │    printf(&#34;Hello, World!\n&#34;);
-   5   │    return 0;
-   6   │ }
-───────┴───────────────────────────────────────────────────────────────────────
-$ bin/clang -Wall inputs/helloworld.c -o outputs/helloworld
-$ outputs/helloworld
-Hello, World!
-$ bin/clang -S -emit-llvm -O0 inputs/helloworld.c -o outputs/helloworld.ll
-$ bat outputs/helloworld.ll
-───────┬───────────────────────────────────────────────────────────────────────
-       │ File: outputs/helloworld.ll
-───────┼───────────────────────────────────────────────────────────────────────
-   1   │ ; ModuleID = &#39;inputs/helloworld.c&#39;
-   2   │ source_filename = &#34;inputs/helloworld.c&#34;
-   3   │ target datalayout = &#34;e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128&#34;
-   4   │ target triple = &#34;x86_64-apple-macosx10.14.6&#34;
-   5   │
-   6   │ @.str = private unnamed_addr constant [15 x i8] c&#34;Hello, World!\0A\00&#34;, align 1
-   7   │
-   8   │ ; Function Attrs: noinline nounwind optnone ssp uwtable
-   9   │ define i32 @main() #0 {
-  10   │ entry:
-  11   │   %retval = alloca i32, align 4
-  12   │   store i32 0, i32* %retval, align 4
-  13   │   %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str, i64 0, i64 0))
-  14   │   ret i32 0
-  15   │ }
-  16   │
-  17   │ declare i32 @printf(i8*, ...) #1
-  18   │
-  19   │ attributes #0 = { noinline nounwind optnone ssp uwtable &#34;correctly-rounded-divide-sqrt-fp-math&#34;=&#34;false&#34; &#34;disable-tail-calls&#34;=&#34;false&#34; &#34;frame-pointer&#34;=&#34;all&#34; &#34;less-precise-fpmad&#34;=&#34;fals
-       │ e&#34; &#34;min-legal-vector-width&#34;=&#34;0&#34; &#34;no-infs-fp-math&#34;=&#34;false&#34; &#34;no-jump-tables&#34;=&#34;false&#34; &#34;no-nans-fp-math&#34;=&#34;false&#34; &#34;no-signed-zeros-fp-math&#34;=&#34;false&#34; &#34;no-trapping-math&#34;=&#34;false&#34; &#34;stack-prot
-       │ ector-buffer-size&#34;=&#34;8&#34; &#34;target-cpu&#34;=&#34;penryn&#34; &#34;target-features&#34;=&#34;+cx16,+cx8,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87&#34; &#34;unsafe-fp-math&#34;=&#34;false&#34; &#34;use-soft-float&#34;=&#34;false&#34; }
-  20   │ attributes #1 = { &#34;correctly-rounded-divide-sqrt-fp-math&#34;=&#34;false&#34; &#34;disable-tail-calls&#34;=&#34;false&#34; &#34;frame-pointer&#34;=&#34;all&#34; &#34;less-precise-fpmad&#34;=&#34;false&#34; &#34;no-infs-fp-math&#34;=&#34;false&#34; &#34;no-nans-
-       │ fp-math&#34;=&#34;false&#34; &#34;no-signed-zeros-fp-math&#34;=&#34;false&#34; &#34;no-trapping-math&#34;=&#34;false&#34; &#34;stack-protector-buffer-size&#34;=&#34;8&#34; &#34;target-cpu&#34;=&#34;penryn&#34; &#34;target-features&#34;=&#34;+cx16,+cx8,+fxsr,+mmx,+sahf,
-       │ +sse,+sse2,+sse3,+sse4.1,+ssse3,+x87&#34; &#34;unsafe-fp-math&#34;=&#34;false&#34; &#34;use-soft-float&#34;=&#34;false&#34; }
-  21   │
-  22   │ !llvm.module.flags = !{!0, !1, !2}
-  23   │ !llvm.ident = !{!3}
-  24   │
-  25   │ !0 = !{i32 2, !&#34;SDK Version&#34;, [2 x i32] [i32 10, i32 15]}
-  26   │ !1 = !{i32 1, !&#34;wchar_size&#34;, i32 4}
-  27   │ !2 = !{i32 7, !&#34;PIC Level&#34;, i32 2}
-  28   │ !3 = !{!&#34;clang version 10.0.0 (git@github.com:llvm/llvm-project.git 23fdd513a3ba7594ccdab1ea30608f4cab7faee4)&#34;}
-───────┴───────────────────────────────────────────────────────────────────────
-$
-</code></pre></div><h2 id="success">Success</h2>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ git clone git@github.com:llvm/llvm-project.git
+</span></span><span style="display:flex;"><span>Cloning into &#39;llvm-project&#39;...
+</span></span><span style="display:flex;"><span>remote: Enumerating objects: 1141, done.
+</span></span><span style="display:flex;"><span>remote: Counting objects: 100% (1141/1141), done.
+</span></span><span style="display:flex;"><span>remote: Compressing objects: 100% (155/155), done.
+</span></span><span style="display:flex;"><span>remote: Total 3577397 (delta 998), reused 1011 (delta 981), pack-reused 3576256
+</span></span><span style="display:flex;"><span>Receiving objects: 100% (3577397/3577397), 1.14 GiB | 5.98 MiB/s, done.
+</span></span><span style="display:flex;"><span>Resolving deltas: 100% (2862094/2862094), done.
+</span></span><span style="display:flex;"><span>Checking out files: 100% (86709/86709), done.
+</span></span><span style="display:flex;"><span>$
+</span></span></code></pre></div><p>Whoo-baby, that&rsquo;s a monorepo behemoth. Next, I configured a build.</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ cd llvm-project
+</span></span><span style="display:flex;"><span>$ mkdir build
+</span></span><span style="display:flex;"><span>$ cd build/
+</span></span><span style="display:flex;"><span>$ cmake -G Ninja ../llvm/ \
+</span></span><span style="display:flex;"><span>    -DLLVM_ENABLE_PROJECTS=&#34;clang&#34; \
+</span></span><span style="display:flex;"><span>    -DCMAKE_BUILD_TYPE=&#34;Release&#34; \
+</span></span><span style="display:flex;"><span>    -DLLVM_ENABLE_ASSERTIONS=On \
+</span></span><span style="display:flex;"><span>    -DLLVM_CCACHE_BUILD=On
+</span></span><span style="display:flex;"><span>[...]
+</span></span><span style="display:flex;"><span>-- Build files have been written to: /Users/liamr/Code/llvm-project/build
+</span></span><span style="display:flex;"><span>$
+</span></span></code></pre></div><p>And now, we build! (And build and run all the tests.)</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>$ ninja check<span style="color:#719e07">-</span>all
+</span></span><span style="display:flex;"><span>[<span style="color:#2aa198">184</span><span style="color:#719e07">/</span><span style="color:#2aa198">4275</span>] Generating VCSRevision.h
+</span></span><span style="display:flex;"><span><span style="color:#719e07">--</span> Found Git: <span style="color:#719e07">/</span>usr<span style="color:#719e07">/</span>bin<span style="color:#719e07">/</span><span style="color:#268bd2">git</span> (found version <span style="color:#2aa198">&#34;2.21.0 (Apple Git-122)&#34;</span>)
+</span></span><span style="display:flex;"><span>[<span style="color:#2aa198">2412</span><span style="color:#719e07">/</span><span style="color:#2aa198">4275</span>] Generating VCSVersion.inc
+</span></span><span style="display:flex;"><span><span style="color:#719e07">--</span> Found Git: <span style="color:#719e07">/</span>usr<span style="color:#719e07">/</span>bin<span style="color:#719e07">/</span><span style="color:#268bd2">git</span> (found version <span style="color:#2aa198">&#34;2.21.0 (Apple Git-122)&#34;</span>)
+</span></span><span style="display:flex;"><span>[<span style="color:#2aa198">3470</span><span style="color:#719e07">/</span><span style="color:#2aa198">4275</span>] cd <span style="color:#719e07">/</span>Users<span style="color:#719e07">/</span>liamr<span style="color:#719e07">/</span>Code<span style="color:#719e07">/</span>llvm<span style="color:#719e07">-</span>project<span style="color:#719e07">/</span>clang<span style="color:#719e07">/</span>bindings<span style="color:#719e07">/</span>python <span style="color:#719e07">&amp;&amp;</span> <span style="color:#719e07">/</span>usr<span style="color:#719e07">/</span>local<span style="color:#719e07">/</span>Cellar<span style="color:#719e07">/</span>cmake<span style="color:#719e07">/</span><span style="color:#2aa198">3.15.4</span><span style="color:#719e07">/...</span>E env CLANG_LIBRARY_PATH=<span style="color:#719e07">/</span>Users<span style="color:#719e07">/</span>liamr<span style="color:#719e07">/</span>Code<span style="color:#719e07">/</span>llvm<span style="color:#719e07">-</span>project<span style="color:#719e07">/</span>build<span style="color:#719e07">/</span>lib <span style="color:#719e07">/</span>usr<span style="color:#719e07">/</span>bin<span style="color:#719e07">/</span>python <span style="color:#719e07">-</span>m unittest discover
+</span></span><span style="display:flex;"><span><span style="color:#719e07">................................................</span>.s<span style="color:#719e07">................................................</span>s.s<span style="color:#719e07">......</span>.s<span style="color:#719e07">...</span>s<span style="color:#719e07">.........</span>s<span style="color:#719e07">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">----------------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>Ran <span style="color:#2aa198">126</span> tests in <span style="color:#2aa198">0.693</span>s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#268bd2">OK</span> (skipped=<span style="color:#2aa198">6</span>)
+</span></span><span style="display:flex;"><span>[<span style="color:#2aa198">4274</span><span style="color:#719e07">/</span><span style="color:#2aa198">4275</span>] Running all regression tests
+</span></span><span style="display:flex;"><span>llvm<span style="color:#719e07">-</span>lit: <span style="color:#719e07">/</span>Users<span style="color:#719e07">/</span>liamr<span style="color:#719e07">/</span>Code<span style="color:#719e07">/</span>llvm<span style="color:#719e07">-</span>project<span style="color:#719e07">/</span>llvm<span style="color:#719e07">/</span>utils<span style="color:#719e07">/</span>lit<span style="color:#719e07">/</span>lit<span style="color:#719e07">/</span>llvm<span style="color:#719e07">/</span>config.py:<span style="color:#2aa198">342</span>: note: using clang: <span style="color:#719e07">/</span>Users<span style="color:#719e07">/</span>liamr<span style="color:#719e07">/</span>Code<span style="color:#719e07">/</span>llvm<span style="color:#719e07">-</span>project<span style="color:#719e07">/</span>build<span style="color:#719e07">/</span>bin<span style="color:#719e07">/</span>clang
+</span></span><span style="display:flex;"><span>llvm<span style="color:#719e07">-</span>lit: <span style="color:#719e07">/</span>Users<span style="color:#719e07">/</span>liamr<span style="color:#719e07">/</span>Code<span style="color:#719e07">/</span>llvm<span style="color:#719e07">-</span>project<span style="color:#719e07">/</span>llvm<span style="color:#719e07">/</span>utils<span style="color:#719e07">/</span>lit<span style="color:#719e07">/</span>lit<span style="color:#719e07">/</span>util.py:<span style="color:#2aa198">408</span>: note: using SDKROOT: u&#39;<span style="color:#719e07">/</span>Applications<span style="color:#719e07">/</span>Xcode.app<span style="color:#719e07">/</span>Contents<span style="color:#719e07">/</span>Developer<span style="color:#719e07">/</span>Platforms<span style="color:#719e07">/</span>MacOSX.platform<span style="color:#719e07">/</span>Developer<span style="color:#719e07">/</span>SDKs<span style="color:#719e07">/</span>MacOSX10<span style="color:#2aa198">.15</span>.sdk&#39;
+</span></span><span style="display:flex;"><span>llvm<span style="color:#719e07">-</span>lit: <span style="color:#719e07">/</span>Users<span style="color:#719e07">/</span>liamr<span style="color:#719e07">/</span>Code<span style="color:#719e07">/</span>llvm<span style="color:#719e07">-</span>project<span style="color:#719e07">/</span>build<span style="color:#719e07">/</span>utils<span style="color:#719e07">/</span>lit<span style="color:#719e07">/</span>tests<span style="color:#719e07">/</span>lit.cfg:<span style="color:#2aa198">69</span>: warning: Setting a timeout per test not supported. Requires the Python psutil module but it could not be found. Try installing it via pip or via your operating system&#39;s <span style="color:#719e07">package</span> manager. Some tests will be skipped and the <span style="color:#719e07">--</span>timeout command line argument will not work.
+</span></span><span style="display:flex;"><span>Testing Time: <span style="color:#2aa198">680.16</span>s
+</span></span><span style="display:flex;"><span>  Expected Passes    : <span style="color:#2aa198">48896</span>
+</span></span><span style="display:flex;"><span>  Expected Failures  : <span style="color:#2aa198">172</span>
+</span></span><span style="display:flex;"><span>  Unsupported Tests  : <span style="color:#2aa198">1191</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#2aa198">1</span> <span style="color:#268bd2">warning</span>(s) in tests.
+</span></span><span style="display:flex;"><span>$
+</span></span></code></pre></div><h2 id="test-compilation">Test Compilation</h2>
+<p>About an hour later, my laptop&rsquo;s fans have had a great workout, and I&rsquo;ve built something! But&hellip; does it work?</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#719e07">$</span> mkdir outputs
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> mkdir inputs
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> vi inputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>c
+</span></span><span style="display:flex;"><span>[<span style="color:#719e07">...</span>]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> bat inputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>c
+</span></span><span style="display:flex;"><span>───────┬───────────────────────────────────────────────────────────────────────
+</span></span><span style="display:flex;"><span>       │ <span style="color:#cb4b16">File</span>: inputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>c
+</span></span><span style="display:flex;"><span>───────┼───────────────────────────────────────────────────────────────────────
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">1</span>   │ <span style="color:#586e75">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">2</span>   │
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">3</span>   │ <span style="color:#cb4b16">int</span> main() {
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">4</span>   │    printf(<span style="color:#2aa198">&#34;Hello, World!</span><span style="color:#cb4b16">\n</span><span style="color:#2aa198">&#34;</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">5</span>   │    <span style="color:#719e07">return</span> <span style="color:#2aa198">0</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">6</span>   │ }
+</span></span><span style="display:flex;"><span>───────┴───────────────────────────────────────────────────────────────────────
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> bin<span style="color:#719e07">/</span>clang <span style="color:#719e07">-</span>Wall inputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>c <span style="color:#719e07">-</span>o outputs<span style="color:#719e07">/</span>helloworld
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> outputs<span style="color:#719e07">/</span>helloworld
+</span></span><span style="display:flex;"><span>Hello, <span style="color:#cb4b16">World</span><span style="color:#719e07">!</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> bin<span style="color:#719e07">/</span>clang <span style="color:#719e07">-</span>S <span style="color:#719e07">-</span>emit<span style="color:#719e07">-</span>llvm <span style="color:#719e07">-</span>O0 inputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>c <span style="color:#719e07">-</span>o outputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>ll
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span> bat outputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>ll
+</span></span><span style="display:flex;"><span>───────┬───────────────────────────────────────────────────────────────────────
+</span></span><span style="display:flex;"><span>       │ <span style="color:#cb4b16">File</span>: outputs<span style="color:#719e07">/</span>helloworld<span style="color:#719e07">.</span>ll
+</span></span><span style="display:flex;"><span>───────┼───────────────────────────────────────────────────────────────────────
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">1</span>   │ ; ModuleID <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;inputs/helloworld.c&#39;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">2</span>   │ source_filename <span style="color:#719e07">=</span> <span style="color:#2aa198">&#34;inputs/helloworld.c&#34;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">3</span>   │ target datalayout <span style="color:#719e07">=</span> <span style="color:#2aa198">&#34;e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128&#34;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">4</span>   │ target triple <span style="color:#719e07">=</span> <span style="color:#2aa198">&#34;x86_64-apple-macosx10.14.6&#34;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">5</span>   │
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">6</span>   │ @<span style="color:#719e07">.</span>str <span style="color:#719e07">=</span> private unnamed_addr constant [<span style="color:#2aa198">15</span> x i8] c<span style="color:#2aa198">&#34;Hello, World!</span><span style="color:#cb4b16">\0</span><span style="color:#2aa198">A</span><span style="color:#cb4b16">\00</span><span style="color:#2aa198">&#34;</span>, align <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">7</span>   │
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">8</span>   │ ; Function Attrs: noinline nounwind optnone ssp uwtable
+</span></span><span style="display:flex;"><span>   <span style="color:#2aa198">9</span>   │ define i32 @main() <span style="color:#586e75">#0 {</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">10</span>   │ entry:
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">11</span>   │   <span style="color:#719e07">%</span>retval <span style="color:#719e07">=</span> alloca i32, align <span style="color:#2aa198">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">12</span>   │   store i32 <span style="color:#2aa198">0</span>, i32<span style="color:#719e07">*</span> <span style="color:#719e07">%</span>retval, align <span style="color:#2aa198">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">13</span>   │   <span style="color:#719e07">%</span>call <span style="color:#719e07">=</span> call i32 (i8<span style="color:#719e07">*</span>, <span style="color:#719e07">...</span>) @printf(i8<span style="color:#719e07">*</span> getelementptr inbounds ([<span style="color:#2aa198">15</span> x i8], [<span style="color:#2aa198">15</span> x i8]<span style="color:#719e07">*</span> @<span style="color:#719e07">.</span>str, i64 <span style="color:#2aa198">0</span>, i64 <span style="color:#2aa198">0</span>))
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">14</span>   │   ret i32 <span style="color:#2aa198">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">15</span>   │ }
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">16</span>   │
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">17</span>   │ declare i32 @printf(i8<span style="color:#719e07">*</span>, <span style="color:#719e07">...</span>) <span style="color:#586e75">#1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">18</span>   │
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">19</span>   │ attributes <span style="color:#586e75">#0 = { noinline nounwind optnone ssp uwtable &#34;correctly-rounded-divide-sqrt-fp-math&#34;=&#34;false&#34; &#34;disable-tail-calls&#34;=&#34;false&#34; &#34;frame-pointer&#34;=&#34;all&#34; &#34;less-precise-fpmad&#34;=&#34;fals</span>
+</span></span><span style="display:flex;"><span>       │ e<span style="color:#2aa198">&#34; &#34;</span><span style="color:#b58900">min</span><span style="color:#719e07">-</span>legal<span style="color:#719e07">-</span>vector<span style="color:#719e07">-</span>width<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#2aa198">0</span><span style="color:#2aa198">&#34; &#34;</span>no<span style="color:#719e07">-</span>infs<span style="color:#719e07">-</span>fp<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>no<span style="color:#719e07">-</span>jump<span style="color:#719e07">-</span>tables<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>no<span style="color:#719e07">-</span>nans<span style="color:#719e07">-</span>fp<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>no<span style="color:#719e07">-</span>signed<span style="color:#719e07">-</span>zeros<span style="color:#719e07">-</span>fp<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>no<span style="color:#719e07">-</span>trapping<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>stack<span style="color:#719e07">-</span>prot
+</span></span><span style="display:flex;"><span>       │ ector<span style="color:#719e07">-</span>buffer<span style="color:#719e07">-</span>size<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#2aa198">8</span><span style="color:#2aa198">&#34; &#34;</span>target<span style="color:#719e07">-</span>cpu<span style="color:#2aa198">&#34;=&#34;</span>penryn<span style="color:#2aa198">&#34; &#34;</span>target<span style="color:#719e07">-</span>features<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#719e07">+</span>cx16,<span style="color:#719e07">+</span>cx8,<span style="color:#719e07">+</span>fxsr,<span style="color:#719e07">+</span>mmx,<span style="color:#719e07">+</span>sahf,<span style="color:#719e07">+</span>sse,<span style="color:#719e07">+</span>sse2,<span style="color:#719e07">+</span>sse3,<span style="color:#719e07">+</span>sse4<span style="color:#719e07">.</span><span style="color:#2aa198">1</span>,<span style="color:#719e07">+</span>ssse3,<span style="color:#719e07">+</span>x87<span style="color:#2aa198">&#34; &#34;</span>unsafe<span style="color:#719e07">-</span>fp<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>use<span style="color:#719e07">-</span>soft<span style="color:#719e07">-</span><span style="color:#cb4b16">float</span><span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; }</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">20</span>   │ attributes <span style="color:#586e75">#1 = { &#34;correctly-rounded-divide-sqrt-fp-math&#34;=&#34;false&#34; &#34;disable-tail-calls&#34;=&#34;false&#34; &#34;frame-pointer&#34;=&#34;all&#34; &#34;less-precise-fpmad&#34;=&#34;false&#34; &#34;no-infs-fp-math&#34;=&#34;false&#34; &#34;no-nans-</span>
+</span></span><span style="display:flex;"><span>       │ fp<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>no<span style="color:#719e07">-</span>signed<span style="color:#719e07">-</span>zeros<span style="color:#719e07">-</span>fp<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>no<span style="color:#719e07">-</span>trapping<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>stack<span style="color:#719e07">-</span>protector<span style="color:#719e07">-</span>buffer<span style="color:#719e07">-</span>size<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#2aa198">8</span><span style="color:#2aa198">&#34; &#34;</span>target<span style="color:#719e07">-</span>cpu<span style="color:#2aa198">&#34;=&#34;</span>penryn<span style="color:#2aa198">&#34; &#34;</span>target<span style="color:#719e07">-</span>features<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#719e07">+</span>cx16,<span style="color:#719e07">+</span>cx8,<span style="color:#719e07">+</span>fxsr,<span style="color:#719e07">+</span>mmx,<span style="color:#719e07">+</span>sahf,
+</span></span><span style="display:flex;"><span>       │ <span style="color:#719e07">+</span>sse,<span style="color:#719e07">+</span>sse2,<span style="color:#719e07">+</span>sse3,<span style="color:#719e07">+</span>sse4<span style="color:#719e07">.</span><span style="color:#2aa198">1</span>,<span style="color:#719e07">+</span>ssse3,<span style="color:#719e07">+</span>x87<span style="color:#2aa198">&#34; &#34;</span>unsafe<span style="color:#719e07">-</span>fp<span style="color:#719e07">-</span>math<span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; &#34;</span>use<span style="color:#719e07">-</span>soft<span style="color:#719e07">-</span><span style="color:#cb4b16">float</span><span style="color:#2aa198">&#34;=&#34;</span><span style="color:#268bd2">false</span><span style="color:#2aa198">&#34; }</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">21</span>   │
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">22</span>   │ <span style="color:#719e07">!</span>llvm<span style="color:#719e07">.</span>module<span style="color:#719e07">.</span>flags <span style="color:#719e07">=</span> <span style="color:#719e07">!</span>{<span style="color:#719e07">!</span><span style="color:#2aa198">0</span>, <span style="color:#719e07">!</span><span style="color:#2aa198">1</span>, <span style="color:#719e07">!</span><span style="color:#2aa198">2</span>}
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">23</span>   │ <span style="color:#719e07">!</span>llvm<span style="color:#719e07">.</span>ident <span style="color:#719e07">=</span> <span style="color:#719e07">!</span>{<span style="color:#719e07">!</span><span style="color:#2aa198">3</span>}
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">24</span>   │
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">25</span>   │ <span style="color:#719e07">!</span><span style="color:#2aa198">0</span> <span style="color:#719e07">=</span> <span style="color:#719e07">!</span>{i32 <span style="color:#2aa198">2</span>, <span style="color:#719e07">!</span><span style="color:#2aa198">&#34;SDK Version&#34;</span>, [<span style="color:#2aa198">2</span> x i32] [i32 <span style="color:#2aa198">10</span>, i32 <span style="color:#2aa198">15</span>]}
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">26</span>   │ <span style="color:#719e07">!</span><span style="color:#2aa198">1</span> <span style="color:#719e07">=</span> <span style="color:#719e07">!</span>{i32 <span style="color:#2aa198">1</span>, <span style="color:#719e07">!</span><span style="color:#2aa198">&#34;wchar_size&#34;</span>, i32 <span style="color:#2aa198">4</span>}
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">27</span>   │ <span style="color:#719e07">!</span><span style="color:#2aa198">2</span> <span style="color:#719e07">=</span> <span style="color:#719e07">!</span>{i32 <span style="color:#2aa198">7</span>, <span style="color:#719e07">!</span><span style="color:#2aa198">&#34;PIC Level&#34;</span>, i32 <span style="color:#2aa198">2</span>}
+</span></span><span style="display:flex;"><span>  <span style="color:#2aa198">28</span>   │ <span style="color:#719e07">!</span><span style="color:#2aa198">3</span> <span style="color:#719e07">=</span> <span style="color:#719e07">!</span>{<span style="color:#719e07">!</span><span style="color:#2aa198">&#34;clang version 10.0.0 (git@github.com:llvm/llvm-project.git 23fdd513a3ba7594ccdab1ea30608f4cab7faee4)&#34;</span>}
+</span></span><span style="display:flex;"><span>───────┴───────────────────────────────────────────────────────────────────────
+</span></span><span style="display:flex;"><span><span style="color:#719e07">$</span>
+</span></span></code></pre></div><h2 id="success">Success</h2>
 <p>IT LIVES!</p>
 <p>YMMV, but this worked for me. Let me know on Twitter if you run into anything amiss!</p>
 
@@ -218,12 +220,15 @@ $
 					</nav>
 				
 			
-		</div></div>
+		</div>
+		</div>
 	<div class="footer wrapper">
 	<nav class="nav">
-		<div> © Copyright 2019-2020 by Liam Reimers </div>
+		<div> © Copyright 2019-2023 by Liam Reimers |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
 	</nav>
 </div>
+
+
 
 <script>feather.replace()</script>
 </body>

@@ -17,10 +17,10 @@
     <loc>https://reimers.us/posts/</loc>
     <lastmod>2020-07-07T11:31:00-08:00</lastmod>
   </url><url>
-    <loc>https://reimers.us/</loc>
+    <loc>https://reimers.us/tags/</loc>
     <lastmod>2020-07-07T11:31:00-08:00</lastmod>
   </url><url>
-    <loc>https://reimers.us/tags/</loc>
+    <loc>https://reimers.us/</loc>
     <lastmod>2020-07-07T11:31:00-08:00</lastmod>
   </url><url>
     <loc>https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</loc>

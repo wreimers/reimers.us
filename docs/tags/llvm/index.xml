@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>llvm on reimers.us</title>
+    <title>llvm on travels on a strange planet</title>
     <link>https://reimers.us/tags/llvm/</link>
-    <description>Recent content in llvm on reimers.us</description>
+    <description>Recent content in llvm on travels on a strange planet</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© Copyright 2019-2020 by Liam Reimers</copyright>
-    <lastBuildDate>Sun, 03 Nov 2019 11:00:00 -0800</lastBuildDate><atom:link href="https://reimers.us/tags/llvm/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© Copyright 2019-2023 by Liam Reimers</copyright>
+    <lastBuildDate>Sun, 03 Nov 2019 11:00:00 -0800</lastBuildDate>
+    <atom:link href="https://reimers.us/tags/llvm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1</title>
       <link>https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</link>
       <pubDate>Sun, 03 Nov 2019 11:00:00 -0800</pubDate>
-      
       <guid>https://reimers.us/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</guid>
-      <description>I recently attended the 2019 LLVM Developer Meeting:
-After the first hour, spent listening to the keynote called &amp;ldquo;Generating Optimized Code with GlobalISel&amp;rdquo; my brain hurt, but&amp;hellip; it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!
-Naturally, when I went home and immediately tried to build LLVM on my macBook Pro running macOS 10.</description>
+      <description>I recently attended the 2019 LLVM Developer Meeting:&#xA;Sorry, X (née Twitter) deleted my post.&#xA;After the first hour, spent listening to the keynote called &amp;ldquo;Generating Optimized Code with GlobalISel&amp;rdquo; my brain hurt, but&amp;hellip; it was that good kind of pain, like the one you get after a particularly hard workout.</description>
     </item>
-    
   </channel>
 </rss>

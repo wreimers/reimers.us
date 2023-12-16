@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>reimers.us</title>
+    <title>travels on a strange planet</title>
     <link>https://reimers.us/downloads/</link>
-    <description>Recent content on reimers.us</description>
+    <description>Recent content on travels on a strange planet</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© Copyright 2019-2020 by Liam Reimers</copyright><atom:link href="https://reimers.us/downloads/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© Copyright 2019-2023 by Liam Reimers</copyright>
+    <atom:link href="https://reimers.us/downloads/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
