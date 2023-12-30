@@ -2,7 +2,7 @@
 title: "Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1"
 date: 2019-11-03T11:00:00-08:00
 categories: ["Development", "LLVM"]
-tags: ["clang", "llvm", "walkthrough"]
+tags: ["clang", "llvm"]
 description: "Wherein I become excited about LLVM and set about trying to build it."
 disqus: false
 draft: false
@@ -12,13 +12,19 @@ I recently attended the 2019 LLVM Developer Meeting:
 
 `Sorry, X (née Twitter) deleted my post.`
 
-After the first hour, spent listening to the keynote called "Generating Optimized Code with GlobalISel" my brain hurt, but... it was that good kind of pain, like the one you get after a particularly hard workout. By the end of the day, after having seen several more talks, I was psyched up!
+After the first hour, spent listening to the keynote called "Generating
+Optimized Code with GlobalISel" my brain hurt, but... it was that good kind of
+pain, like the one you get after a particularly hard workout. By the end of the
+day, after having seen several more talks, I was psyched up!
 
-Naturally, when I went home and immediately tried to build LLVM on my macBook Pro running macOS 10.14.6 Mojave, and with Xcode 11.1 installed.
+Naturally, when I went home and immediately tried to build LLVM on my macBook
+Pro running macOS 10.14.6 Mojave, and with Xcode 11.1 installed.
 
 ## Before We Begin
 
-Make sure you've launched Xcode at least once and it's completed the First Launch Experience, which includes accepting the license agreement. You can also accept using the command line:
+Make sure you've launched Xcode at least once and it's completed the First
+Launch Experience, which includes accepting the license agreement. You can also
+accept using the command line:
 
 ```
 $ sudo xcodebuild -license accept
@@ -26,21 +32,27 @@ $ sudo xcodebuild -license accept
 
 ## System Headers
 
-I'm runing Xcode 11.1, which comes with the macOS 10.15 Catalina SDK. According to [the Xcode 10.0 release notes](https://developer.apple.com/documentation/xcode_release_notes/xcode_10_release_notes), Apple has helpfully provided a package to install the system headers into /usr/include. You'll need these for the LLVM unit tests.
+I'm runing Xcode 11.1, which comes with the macOS 10.15 Catalina SDK. According
+to [the Xcode 10.0 release notes](https://developer.apple.com/documentation/xcode_release_notes/xcode_10_release_notes),
+Apple has helpfully provided a package to install the system headers into
+/usr/include. You'll need these for the LLVM unit tests.
 
 ```
 $ open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
 ``` 
 
-This command will open the package installer UI for you so you can install the headers:
+This command will open the package installer UI for you so you can install the
+headers:
 
 ![Package Installer UI](/img/macos-1014-headers-installer-ui.png)
 
 ## Install Requirements
 
-Homebrew has some flaws, but I just want dependency management to get out of my way and let me do work, and it's really excellent at that. 
+Homebrew has some flaws, but I just want dependency management to get out of my
+way and let me do work, and it's really excellent at that. 
 
-I updated Homebrew and upgraded all of my installed software. What can I say? I like to live on the edge.
+I updated Homebrew and upgraded all of my installed software. What can I say? I
+like to live on the edge.
 
 ```
 $ brew update
@@ -198,4 +210,5 @@ $
 
 IT LIVES!
 
-YMMV, but this worked for me. Let me know on Twitter if you run into anything amiss!
+YMMV, but this worked for me. Let me know on Twitter if you run into anything
+amiss!

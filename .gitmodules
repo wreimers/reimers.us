@@ -1,0 +1,3 @@
+[submodule "themes/ezhill"]
+ 	path = themes/ezhill
+ 	url = git@github.com:vividvilla/ezhil.git

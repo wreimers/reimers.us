@@ -2,7 +2,7 @@ baseURL = "https://reimers.us/"
 languageCode = "en-us"
 title = "travels on a strange planet"
 theme = "ezhil"
-publishdir = "./docs/"
+publishdir = "docs"
 
 copyright = "© Copyright 2019-2023 by Liam Reimers"
 

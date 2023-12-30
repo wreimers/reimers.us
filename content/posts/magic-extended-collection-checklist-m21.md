@@ -2,7 +2,7 @@
 title: "Extended Collection Checklist - Core Set 2021"
 date: 2020-07-07T11:31:00-08:00
 categories: ["Magic: the Gathering"]
-tags: ["checklist", "mtg", "m21"]
+tags: ["magic"]
 description: "Wherein I publish my first bit of Magic content for collectors."
 disqus: false
 draft: false
