@@ -1,10 +1,10 @@
 baseURL = "https://reimers.us/"
-languageCode = "en-us"
+locale = "en-us"
 title = "travels on a strange planet"
 theme = "ezhil"
 publishdir = "public"
 
-copyright = "© Copyright 2019-2023 by Liam Reimers"
+copyright = "© Copyright 2019-2026 by Liam Reimers"
 
 # Enable syntax highlighting.
 pygmentsstyle = "solarized-dark"
