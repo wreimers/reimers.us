@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Posts on travels on a strange planet</title>
-		<link>http://localhost:1313/posts/</link>
-		<description>Recent content in Posts on travels on a strange planet</description>
+		<title>Magic on travels on a strange planet</title>
+		<link>http://localhost:1313/tags/magic/</link>
+		<description>Recent content in Magic on travels on a strange planet</description>
 		<generator>Hugo</generator>
 		<language>en-us</language>
 		
@@ -14,20 +14,13 @@
 		
 			<lastBuildDate>Tue, 07 Jul 2020 11:31:00 -0800</lastBuildDate>
 		
-			<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+			<atom:link href="http://localhost:1313/tags/magic/index.xml" rel="self" type="application/rss+xml" />
 			<item>
 				<title>Extended Collection Checklist - Core Set 2021</title>
 				<link>http://localhost:1313/posts/magic-extended-collection-checklist-m21/</link>
 				<pubDate>Tue, 07 Jul 2020 11:31:00 -0800</pubDate>
 				<guid>http://localhost:1313/posts/magic-extended-collection-checklist-m21/</guid>
 				<description>&lt;p&gt;I&amp;rsquo;ve been playing &lt;a href=&#34;https://magic.wizards.com/&#34;&gt;Magic: the Gathering&lt;/a&gt; - a collectible card game published by Wizards of the Coast (WotC) - since 1994. It plucks a lot of my strings: it&amp;rsquo;s fantasy themed; it&amp;rsquo;s art-forward; it&amp;rsquo;s a complex math-based game; it requires exploration and interaction with other players; and, importantly, it&amp;rsquo;s collectible. I&amp;rsquo;m very much a completionist in many aspects of life, not least of which is collecting Magic. Recently though, I found myself in need of additonal tools to manage my collection.&lt;/p&gt;</description>
-			</item>
-			<item>
-				<title>Building LLVM and Clang on macOS 10.14.6 with Xcode 11.1</title>
-				<link>http://localhost:1313/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</link>
-				<pubDate>Sun, 03 Nov 2019 11:00:00 -0800</pubDate>
-				<guid>http://localhost:1313/posts/building-llvm-and-clang-macos-10.14.6-xcode-11.1/</guid>
-				<description>&lt;p&gt;I recently attended the 2019 LLVM Developer Meeting:&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;Sorry, X (née Twitter) deleted my post.&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;After the first hour, spent listening to the keynote called &amp;ldquo;Generating&#xA;Optimized Code with GlobalISel&amp;rdquo; my brain hurt, but&amp;hellip; it was that good kind of&#xA;pain, like the one you get after a particularly hard workout. By the end of the&#xA;day, after having seen several more talks, I was psyched up!&lt;/p&gt;</description>
 			</item>
 	</channel>
 </rss>
